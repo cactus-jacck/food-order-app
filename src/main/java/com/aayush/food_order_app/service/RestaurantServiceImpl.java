@@ -36,7 +36,6 @@ public class RestaurantServiceImpl implements RestaurantService
     @Override
     public Restaurant createRestaurant(CreateRestaurantRequestDto restaurantRequestDto, User user)
     {
-        System.out.println(restaurantRequestDto.getAddress().toString());
 
         Restaurant restaurant = Restaurant.builder()
                 .address(restaurantRequestDto.getAddress())
