@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IngredientsItems
+@Table(name = "ingredient_item")
+public class IngredientItem
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +22,10 @@ public class IngredientsItems
     @JsonIgnore
     @ManyToOne
     private IngredientCategory category;
+
+    @JsonIgnore
+    @ManyToOne
+    private Restaurant restaurant;
 
     private boolean inStock = true;
 }

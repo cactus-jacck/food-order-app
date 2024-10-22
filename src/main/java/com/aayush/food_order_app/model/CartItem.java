@@ -29,5 +29,7 @@ public class CartItem
 
     private List<String> ingredients;
 
-    private long totalPrice;
+    private long customerId;
+
+    private double totalPrice;
 }

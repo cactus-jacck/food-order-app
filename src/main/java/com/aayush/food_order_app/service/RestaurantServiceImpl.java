@@ -1,6 +1,5 @@
 package com.aayush.food_order_app.service;
 
-import com.aayush.food_order_app.model.Address;
 import com.aayush.food_order_app.model.Restaurant;
 import com.aayush.food_order_app.model.RestaurantDTO;
 import com.aayush.food_order_app.model.User;

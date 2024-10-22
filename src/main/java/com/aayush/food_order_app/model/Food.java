@@ -2,6 +2,7 @@ package com.aayush.food_order_app.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Food
 {
     @Id
@@ -42,7 +44,7 @@ public class Food
     private boolean isSeasonal;
 
     @ManyToMany
-    private List<IngredientsItems> ingredients = new ArrayList<>();
+    private List<IngredientItem> ingredients = new ArrayList<>();
 
     private Date creationDate;
 }

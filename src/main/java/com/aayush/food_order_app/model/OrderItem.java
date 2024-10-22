@@ -22,7 +22,7 @@ public class OrderItem
 
     private int quantity;
 
-    private long totalPrice;
+    private double totalPrice;
 
     private List<String> ingredients;
 
