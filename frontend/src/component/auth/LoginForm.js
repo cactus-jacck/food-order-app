@@ -4,6 +4,8 @@ import React from 'react'
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch} from "react-redux";
+import { loginUser } from '../state/authentication/Action';
 
 const initialValues = {
     email: "",
@@ -11,9 +13,10 @@ const initialValues = {
 }
 const LoginForm = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
-    const handleSubmit = () => {
-
+    const handleSubmit = (values) => {
+        dispatch(loginUser({userData:values, navigate}))
     }
     return (
         <div>
@@ -50,5 +53,5 @@ const LoginForm = () => {
         </div>
     )
 }
-
+ 
 export default LoginForm
