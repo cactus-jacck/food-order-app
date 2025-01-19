@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,10 +27,25 @@ public class RestaurantCustomerController
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Restaurant>> getAllRestaurant()
+    public ResponseEntity<List<RestaurantDTO>> getAllRestaurant()
     {
         List<Restaurant> restaurants = restaurantService.getAllRestaurants();
-        return new ResponseEntity<>(restaurants, HttpStatus.OK);
+        List<RestaurantDTO> restaurantDtoList = new ArrayList<>();
+        for (Restaurant restaurant : restaurants )
+        {
+            RestaurantDTO restaurantDTO = new RestaurantDTO();
+            restaurantDTO.setId(restaurant.getId());
+            restaurantDTO.setTitle(restaurant.getName());
+            restaurantDTO.setImages(restaurant.getImages());
+            restaurantDTO.setCity(restaurant.getAddress().getCity());
+            restaurantDTO.setDescription(restaurant.getDescription());
+            restaurantDTO.setOwnerName(restaurant.getOwner().getFullName());
+            restaurantDTO.setOpen(restaurant.isOpen());
+//            restaurantDTO.setAddress(restaurant.getAddress());
+
+            restaurantDtoList.add(restaurantDTO);
+        }
+        return new ResponseEntity<>(restaurantDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/search")
@@ -41,11 +57,18 @@ public class RestaurantCustomerController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurant> findRestaurantById(@RequestHeader("Authorization") String jwt, @PathVariable long id) throws Exception
+    public ResponseEntity<RestaurantDTO> findRestaurantById(@RequestHeader("Authorization") String jwt, @PathVariable long id) throws Exception
     {
         User user = userService.findUserByJwtToken(jwt);
-        Restaurant restaurants = restaurantService.findRestaurantById(id);
-        return new ResponseEntity<>(restaurants, HttpStatus.OK);
+        Restaurant restaurant = restaurantService.findRestaurantById(id);
+        RestaurantDTO restaurantDTO = new RestaurantDTO();
+        restaurantDTO.setId(restaurant.getId());
+        restaurantDTO.setTitle(restaurant.getName());
+        restaurantDTO.setImages(restaurant.getImages());
+        restaurantDTO.setDescription(restaurant.getDescription());
+        restaurantDTO.setOwnerName(restaurant.getOwner().getFullName());
+        restaurantDTO.setOpen(restaurant.isOpen());
+        return new ResponseEntity<>(restaurantDTO, HttpStatus.OK);
     }
 
     @PutMapping("/{id}/add-favourites")

@@ -17,7 +17,7 @@ public class OrderItem
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Food food;
 
     private int quantity;

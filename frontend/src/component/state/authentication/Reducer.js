@@ -38,6 +38,7 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 user: action.payload,
+                favorites: action.payload.favourites
             };
 
         case ADD_TO_FAVORITE_SUCCESS:
@@ -46,17 +47,7 @@ export const authReducer = (state = initialState, action) => {
                 isLoading: false,
                 error: null,
                 favorites: isPresentInFavorites(state.favorites, action.payload) ?
-                    state.favorites.filter((item) => action.payload !== action.payload.id) :
-                    [action.payload, ...state.favorites]
-            }
-
-        case ADD_TO_FAVORITE_SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                error: null,
-                favorites: isPresentInFavorites(state.favorites, action.payload) ?
-                    state.favorites.filter((item) => action.payload !== action.payload.id) :
+                    state.favorites.filter((item) => item.id !== action.payload.id) :
                     [action.payload, ...state.favorites]
             }
         case REGISTER_FAILURE:
