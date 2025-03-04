@@ -6,6 +6,7 @@ import Auth from '../auth/Auth'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllRestaurantsAction } from '../state/restaurant/Action'
 import { useNavigate } from 'react-router-dom'
+import { findCart } from '../state/cart/Action'
 
 const Home = () => {
     const navigate = useNavigate()

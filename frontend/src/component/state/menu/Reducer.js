@@ -17,6 +17,7 @@ const menuItemReducer = (state = initialState, action) => {
         case actionTypes.DELETE_MENU_ITEM_REQUEST:
         case actionTypes.SEARCH_MENU_ITEM_REQUEST:
         case actionTypes.UPDATE_MENU_ITEMS_AVAILABILITY_REQUEST:
+        case actionTypes.GET_ALL_MENU_ITEMS_REQUEST:
             return{
                 ...state,
                 loading: true,
@@ -30,13 +31,13 @@ const menuItemReducer = (state = initialState, action) => {
                 menuItems: [...state.menuItems, action.payload],
                 message: "Food Created Successfully"
             }
-        case actionTypes.GET_MENU_ITEMS_BY_RESTAURANT_ID_SUCCESS:
-            return{
-                ...state,
-                loading: false,
-                menuItems: [...state.menuItems, action.payload],
-                message: "Food Created Successfully"
-            }
+        // case actionTypes.GET_MENU_ITEMS_BY_RESTAURANT_ID_SUCCESS:
+        //     return{
+        //         ...state,
+        //         loading: false,
+        //         menuItems: [...state.menuItems, action.payload],
+        //         message: "Food Created Successfully"
+        //     }
         case actionTypes.GET_MENU_ITEMS_BY_RESTAURANT_ID_SUCCESS:
             return {
                 ...state,
@@ -66,11 +67,18 @@ const menuItemReducer = (state = initialState, action) => {
                 loading: false,
                 search: action.payload
             }
+        case actionTypes.GET_ALL_MENU_ITEMS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                menuItems: action.payload
+            }
         case actionTypes.CREATE_MENU_ITEM_FAILURE:
         case actionTypes.GET_MENU_ITEMS_BY_RESTAURANT_ID_FAILURE:
         case actionTypes.DELETE_MENU_ITEM_FAILURE:
         case actionTypes.SEARCH_MENU_ITEM_FAILURE:
         case actionTypes.UPDATE_MENU_ITEMS_AVAILABILITY_FAILURE:
+        case actionTypes.GET_ALL_MENU_ITEMS_FAILURE:
             return {
                 ...state,
                 loading: false,

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -8,6 +8,9 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Button } from '@mui/material';
+import { categorizeIngredients } from '../utils/categorizedIngredients';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItemToCart, findCart, updateCartItem } from '../state/cart/Action';
 
 const demo = [
   {
@@ -24,9 +27,44 @@ const demo = [
   }
 ];
 
-const MenuCard = () => {
-  const handleCheckboxChange=()=>{
-    console.log("value")
+
+const MenuCard = ({ item }) => {
+  const [selectedIngredients, setSelectedIngredients] = useState([])
+  const { cart } = useSelector(store => store)
+  const dispatch = useDispatch()
+  const jwt = localStorage.getItem("jwt")
+
+  const handleAddToCart = (e) => {
+    e.preventDefault()
+    const existingCartItem = cart?.cartItems?.find(cartItem => cartItem.food.id === item.id);
+    console.log("Existing cart item: ", existingCartItem)
+
+    if (existingCartItem) {
+      const data = { cartItemId: existingCartItem.id, quantity: existingCartItem.quantity + 1 }
+      dispatch(updateCartItem({ data: data, jwt: jwt }))
+    }
+    else {
+      const reqData = {
+        token: localStorage.getItem('jwt'),
+        cartItem: {
+          foodId: item.id,
+          quantity: 1,
+          ingredients: selectedIngredients
+        }
+      }
+      dispatch(addItemToCart(reqData))
+    }
+    setTimeout(() => {
+      dispatch(findCart(jwt));
+    }, 100);
+  }
+
+  const handleCheckboxChange = (itemName) => {
+    if (selectedIngredients.includes(itemName)) {
+      setSelectedIngredients(selectedIngredients.filter(item => item !== itemName))
+    } else {
+      setSelectedIngredients([...selectedIngredients, itemName])
+    }
   }
   return (
     <Accordion className="w-full max-w-4xl mx-auto">
@@ -37,27 +75,31 @@ const MenuCard = () => {
       >
         <div className='flex items-center justify-between w-full'>
           <div className='flex items-center gap-5 w-full'>
-            <img className='w-[7rem] h-[7rem] object-cover' src="https://images.pexels.com/photos/1251208/pexels-photo-1251208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
+            <img className='w-[7rem] h-[7rem] object-cover min-w-7' src={item.images[0]} alt="" />
             <div className='space-y-1 max-w-2xl w-full'>
-              <p className='font-semibold text-xl'>Steak</p>
-              <p>499</p>
-              <p className='text-gray-400'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis, quia.</p>
+              <p className='font-semibold text-xl'>{item.name}</p>
+              <p>₹ {item.price}</p>
+              <p className='text-gray-400'>{item.description}</p>
             </div>
           </div>
         </div>
       </AccordionSummary>
       <AccordionDetails>
         <Typography>
-          <form>
+          <form onSubmit={handleAddToCart}>
             <div className='flex gap-5 flex-wrap'>
               {
-                demo.map((item) =>
+                Object.keys(categorizeIngredients(item.ingredients)).map((category) =>
                   <div>
-                    <p>{item.category}</p>
+                    <p>{category}</p>
                     <FormGroup>
-                      {item.ingredients.map((item) => <FormControlLabel control={
-                        <Checkbox onChange={() => handleCheckboxChange()} />
-                        } label={item} 
+                      {categorizeIngredients(item.ingredients)[category]?.map((item) =>
+                        <FormControlLabel
+                          key={item.id}
+                          control={
+                            <Checkbox
+                              onChange={() => handleCheckboxChange(item)} />
+                          } label={item.name}
                         />)}
                     </FormGroup>
                   </div>

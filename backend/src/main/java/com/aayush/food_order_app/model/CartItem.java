@@ -31,5 +31,5 @@ public class CartItem
 
     private long customerId;
 
-    private double totalPrice;
+    private double total;
 }

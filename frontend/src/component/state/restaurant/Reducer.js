@@ -25,6 +25,12 @@ const restaurantReducer = (state = initialState, action) => {
                 loading: true,
                 error: null,
             }
+        case actionTypes.GET_RESTAURANTS_CATEGORY_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                categories: action.payload
+            }
         case actionTypes.CREATE_RESTAURANT_SUCCESS:
             return {
                 ...state,
@@ -45,6 +51,12 @@ const restaurantReducer = (state = initialState, action) => {
                 loading: false,
                 usersRestaurant: action.payload
             }
+        case actionTypes.GET_RESTAURANT_BY_ID_SUCCESS:
+        return {
+            ...state,
+            loading: false,
+            restaurant: action.payload // Updates the specific restaurant's details
+        };
         case actionTypes.DELETE_RESTAURANT_SUCCESS:
             return {
                 ...state,

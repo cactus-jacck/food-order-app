@@ -53,8 +53,8 @@ export const getUser = (jwt) => async(dispatch)=>{
             }
         })
         dispatch({type:GET_USER_SUCCESS, payload:data})
-        console.log("user profile", data)
     } catch (error) {
+        localStorage.clear("jwt")
         dispatch({type:GET_USER_FAILURE, payload:error})
         console.log("error: ", error)
     }

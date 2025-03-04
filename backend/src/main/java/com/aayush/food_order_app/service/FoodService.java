@@ -22,4 +22,5 @@ public interface FoodService
     public Food updateFoodAvailibility(long foodId) throws Exception;
 
 
+    public List<Food> getAllFood();
 }

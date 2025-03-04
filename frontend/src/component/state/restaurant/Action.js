@@ -12,7 +12,6 @@ export const getAllRestaurantsAction = (token) => {
                 },
             });
             dispatch({type: GET_ALL_RESTAURANTS_SUCCESS, payload:data});
-            console.log("all restaurant", data);
         }
         catch (error) {
             console.log("catch error ", error)
@@ -21,13 +20,13 @@ export const getAllRestaurantsAction = (token) => {
     }
 }
 
-export const getRestaurantById = (reqData) => {
+export const getRestaurantById = (jwt, restaurantId) => {
     return async (dispatch) => {
         dispatch({type: GET_RESTAURANT_BY_ID_REQUEST});
         try {
-            const response = await api.get(`api/restaurants/${reqData.restaurantId}`, {
+            const response = await api.get(`api/restaurants/${restaurantId}`, {
                 headers: {
-                    Authorization: `Bearer ${reqData.jwt}`,
+                    Authorization: `Bearer ${jwt}`,
                 },
             });
             dispatch({type: GET_RESTAURANT_BY_ID_SUCCESS, payload:response.data})
@@ -198,21 +197,21 @@ export const deleteEventAction = ({eventId, jwt}) => {
     }
 }
 
-export const getRestaurantsCategory = ({restaurantId, jwt}) => {
+export const getRestaurantsCategory = (jwt, restaurantId) => {
     return async (dispatch) => {
         dispatch({type: GET_RESTAURANTS_CATEGORY_REQUEST})
         try{
-            const res = await api.get(`api/category/restaurant/${restaurantId}`, {
+            const res = await api.get(`api/admin/category/restaurant/${restaurantId}`, {
                 headers: {
                     Authorization: `Bearer ${jwt}`
                 }
             })
-            console.log("get restaurants category ", res.data)
+            // console.log("get restaurants category ", res.data)
             dispatch({type: GET_RESTAURANTS_CATEGORY_SUCCESS, payload: res.data})
         }
         catch (error){
             console.log("catch - ", error)
-            dispatch({tyep: GET_RESTAURANTS_CATEGORY_FAILURE, payload: error})
+            dispatch({type: GET_RESTAURANTS_CATEGORY_FAILURE, payload: error})
         }
     }
 }

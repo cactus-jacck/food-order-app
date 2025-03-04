@@ -3,6 +3,7 @@ package com.aayush.food_order_app.controller;
 import com.aayush.food_order_app.model.Cart;
 import com.aayush.food_order_app.model.CartItem;
 import com.aayush.food_order_app.model.User;
+import com.aayush.food_order_app.reponseDto.CartResponseDto;
 import com.aayush.food_order_app.requestDto.AddCartItemReqDto;
 import com.aayush.food_order_app.requestDto.UpdateCartItemRequestDto;
 import com.aayush.food_order_app.service.CartService;
@@ -56,11 +57,23 @@ public class CartController
     }
 
     @GetMapping("/cart")
-    public ResponseEntity<Cart> findUserCart(@RequestHeader("Authorization") String jwt) throws Exception
+    public ResponseEntity<CartResponseDto> findUserCart(@RequestHeader("Authorization") String jwt) throws Exception
     {
         User user = userService.findUserByJwtToken(jwt);
         Cart cart = cartService.findCartByUserId(user.getId());
-        return new ResponseEntity<>(cart, HttpStatus.OK);
+        CartResponseDto responseDto = null;
+
+        if (!cart.getItems().isEmpty())
+        {
+            responseDto = CartResponseDto.builder()
+                    .id(cart.getId())
+                    .customer(cart.getCustomer())
+                    .total(cart.getTotal())
+                    .items(cart.getItems())
+                    .restaurantId(cart.getItems().get(0).getFood().getRestaurant().getId())
+                    .build();
+        }
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
 }

@@ -23,4 +23,14 @@ public class Category                                   //Food category
     @ManyToOne
     @JsonIgnore
     private Restaurant restaurant;
+
+    @Override
+    public String toString()
+    {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", restaurant=" + restaurant +
+                '}';
+    }
 }

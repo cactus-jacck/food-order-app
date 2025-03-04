@@ -14,10 +14,13 @@ const initialState = {
     cart: null,
     cartItems: [],
     loading: false,
-    error: null
+    error: null,
 }
 
 const cartReducer = (state = initialState, action) => {
+
+    const total=action.payload?.total;
+
     switch (action.type) {
         case FIND_CART_REQUEST:
         case GET_ALL_CART_ITEMS_REQUEST:
@@ -47,7 +50,8 @@ const cartReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 cartItems: state.cartItems.map((item) =>
-                item.id === action.payload.id ? action.payload : item)
+                item.id === action.payload.id ? action.payload : item),
+                cart: {...state.cart,total: total}
             }
         case REMOVE_CART_ITEM_SUCCESS:
             return {

@@ -58,7 +58,7 @@ public class CartServiceImpl implements CartService
         cartItem.setQuantity(req.getQuantity());
         cartItem.setIngredients(req.getIngredients());
         cartItem.setCustomerId(user.getId());
-        cartItem.setTotalPrice(req.getQuantity() * food.getPrice());
+        cartItem.setTotal(req.getQuantity() * food.getPrice());
 
         CartItem savedCartItem = cartItemRepository.save(cartItem);
 
@@ -77,7 +77,7 @@ public class CartServiceImpl implements CartService
         }
         CartItem item = cartItemOptional.get();
         item.setQuantity(quantity);
-        item.setTotalPrice(item.getFood().getPrice()*quantity);
+        item.setTotal(item.getFood().getPrice()*quantity);
 
         return cartItemRepository.save(item);
     }

@@ -67,6 +67,8 @@ public class RestaurantCustomerController
         restaurantDTO.setImages(restaurant.getImages());
         restaurantDTO.setDescription(restaurant.getDescription());
         restaurantDTO.setOwnerName(restaurant.getOwner().getFullName());
+        restaurantDTO.setCity(restaurant.getAddress().getCity());
+        restaurantDTO.setOpeningHours(restaurant.getOpeningHours());
         restaurantDTO.setOpen(restaurant.isOpen());
         return new ResponseEntity<>(restaurantDTO, HttpStatus.OK);
     }

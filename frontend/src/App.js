@@ -11,18 +11,41 @@ import Auth from './component/auth/Auth';
 import { useEffect } from 'react';
 import { useDispatch, useSelector} from "react-redux";
 import { getUser } from './component/state/authentication/Action';
+import { findCart } from './component/state/cart/Action';
+import { useNavigate } from 'react-router-dom';
+import Routers from './routers/Routers';
 
 function App() {
   const dispatch = useDispatch()
   const jwt = localStorage.getItem("jwt")
   const {auth} = useSelector(store=>store)
+  const navigate = useNavigate()
+
   useEffect(()=>{
+
+    if(jwt)
+    {
+      dispatch(getUser(jwt))
+    }
+    else
+    {
+      navigate("/account/login")
+    }
+
     dispatch(getUser(auth.jwt || jwt))
   },[auth.jwt])
+
+  useEffect(() => {
+    if (auth.user) {
+      dispatch(findCart(auth.jwt || jwt));
+    }
+  }, [auth.user, auth.jwt]);
+
+
   return (
       <ThemeProvider theme = {darkTheme}>
         <CssBaseline/>
-        <CustomerRoute/>
+        <Routers/>
       </ThemeProvider>
   );
 }

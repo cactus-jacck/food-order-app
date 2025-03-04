@@ -1,5 +1,6 @@
 package com.aayush.food_order_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,7 @@ public class OrderItem
 
     private List<String> ingredients;
 
+    @JsonIgnore
     @ManyToOne
     private Order order;
 }

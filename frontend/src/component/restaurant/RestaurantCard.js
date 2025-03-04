@@ -26,9 +26,9 @@ const RestaurantCard = ({item}) => {
     }
 
     return (
-        <Card className='w-[18rem] productCard'>
-            <div className={`${true ? 'cursor-pointer' : "cursor-not-allowed"} relative`}>
-                <img className='w-full h-[10rem] rounded-t-md object-cover'
+        <Card className='w-[18rem] h-[18rem] flex flex-col productCard'>
+            <div className={`${true ? 'cursor-pointer' : "cursor-not-allowed"} relative w-full h-[10rem]`}>
+                <img className='w-full h-full rounded-t-md object-cover'
                     src={item.images[0]} alt='' />
                 <Chip size='small'
                     className='absolute top-2 left-2'
@@ -36,14 +36,14 @@ const RestaurantCard = ({item}) => {
                     label={item.open ? "open" : "closed"}
                 />
             </div>
-            <div className='p-4 textPart lg:flex w-full justify-between'>
-               <div className='space-y-1'>
+            <div className='p-4 flex-grow flex flex-col justify-between'>
+               <div className='space-y-1 flex-grow'>
                 <p onClick={handleNavigateToRestaurant} className='font-semibold text-lg cursor-pointer'>{item.title}</p>
-                    <p className='text-gray-500 text-sm'>
+                    <p className='text-gray-500 text-sm line-clamp-2'>
                         {item.description}
                     </p>
                 </div>
-                <div>
+                <div className='flex justify-end'>
                     <IconButton onClick={handleAddToFavorites}>
                         {isPresentInFavorites(auth.favorites, item)?<FavoriteIcon/>:<FavoriteBorderIcon/>}
                     </IconButton>

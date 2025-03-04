@@ -2,6 +2,7 @@ import { api } from "../../config/Api"
 import { CREATE_ORDER_FAILURE, CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, GET_USERS_ORDERS_FAILURE, GET_USERS_ORDERS_REQUEST, GET_USERS_ORDERS_SUCCESS } from "./ActionType"
 
 export const createOrder = (reqData) => {
+    console.log("createOrderReqData ", reqData.order)
     return async (dispatch) => {
         dispatch({type: CREATE_ORDER_REQUEST})
         try {
@@ -14,10 +15,10 @@ export const createOrder = (reqData) => {
                 window.location.href = data.payment_url
             }
             console.log("created order data ", data)
-            dispatch({type: CREATE_ORDER_SUCCESS, payload:data})
+            dispatch({type: CREATE_ORDER_SUCCESS, payload:reqData})
         } catch (error) {
             console.log("error ", error)
-            dispatch({type: CREATE_ORDER_FAILURE, payload:data})
+            dispatch({type: CREATE_ORDER_FAILURE, payload:reqData})
         }
     }
 }
@@ -31,7 +32,6 @@ export const getUsersOrder = (jwt) => {
                     Authorization: `Bearer ${jwt}`,
                 }
             })
-            console.log("users order ", data)
             dispatch({type: GET_USERS_ORDERS_SUCCESS, payload: data})
         }
         catch (error) {

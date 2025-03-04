@@ -2,6 +2,7 @@ package com.aayush.food_order_app.controller;
 
 import com.aayush.food_order_app.model.Food;
 import com.aayush.food_order_app.model.User;
+import com.aayush.food_order_app.reponseDto.FoodResponseDto;
 import com.aayush.food_order_app.service.FoodService;
 import com.aayush.food_order_app.service.RestaurantService;
 import com.aayush.food_order_app.service.UserService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,6 +30,34 @@ public class FoodCustomerController
         this.foodService = foodService;
         this.userService = userService;
         this.restaurantService = restaurantService;
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<FoodResponseDto>> getAllFoods(@RequestHeader("Authorization") String jwt) throws Exception
+    {
+        User user = userService.findUserByJwtToken(jwt);
+        List<Food> foods = foodService.getAllFood();
+        List<FoodResponseDto> foodResponseDtoList= new ArrayList<FoodResponseDto>();
+
+        for (Food food: foods)
+        {
+            FoodResponseDto foodResponseDto = FoodResponseDto.builder()
+                    .id(food.getId())
+                    .name(food.getName())
+                    .description(food.getDescription())
+                    .price(food.getPrice())
+                    .images(food.getImages())
+                    .isVegetarian(food.isVegetarian())
+                    .isSeasonal(food.isSeasonal())
+                    .restaurantName(food.getRestaurant().getName())
+                    .restaurantCity(food.getRestaurant().getAddress().getCity())
+                    .restaurantId(food.getRestaurant().getId())
+                    .build();
+
+            foodResponseDtoList.add(foodResponseDto);
+        }
+
+        return new ResponseEntity<>(foodResponseDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/search")
@@ -49,4 +79,5 @@ public class FoodCustomerController
 
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
+
 }

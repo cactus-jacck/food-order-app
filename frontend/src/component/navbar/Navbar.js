@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const Navbar = () => {
-  const {auth} = useSelector(store => store)
+  const {auth, cart} = useSelector(store => store)
   const navigate = useNavigate()
   const handleAvatarClick = () =>{
     if(auth.user?.role === "ROLE_CUSTOMER")
@@ -31,11 +31,11 @@ const Navbar = () => {
       </div>
 
       <div className='flex items-center space-x-2 lg:space-x-10'>
-        <div className=''>
+        {/* <div className=''>
           <IconButton>
             <SearchIcon sx={{ fontSize: "1.5rem" }} />
           </IconButton>
-        </div>
+        </div> */}
         <div className='flex items-center'>
           {auth.user ? <Avatar onClick={(handleAvatarClick)} sx={{ bgcolor: "white", color: pink.A400, cursor: "pointer" }}>{auth.user?.fullName[0].toUpperCase()}</Avatar> :
             <IconButton onClick={()=>navigate("/account/login")}>
@@ -43,8 +43,17 @@ const Navbar = () => {
             </IconButton>} 
         </div>
         <div className=''>
-          <IconButton>
-            <Badge color='primary' badgeContent={3}>
+          <IconButton onClick={()=>navigate("/cart")}> 
+            <Badge color='primary' 
+            badgeContent={cart.cartItems?.length ?? 0}
+            sx={{
+              '& .MuiBadge-badge': {
+                fontSize: '1.2rem', // Adjust the font size as needed
+                padding: '6px', // Optional: Adjust padding for better visibility
+              },
+            }} 
+            showZero
+            >
               <ShoppingCartIcon sx={{ fontSize: "1.5rem" }} />
             </Badge>
           </IconButton>

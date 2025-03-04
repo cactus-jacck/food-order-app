@@ -71,7 +71,7 @@ public class FoodServiceImpl implements FoodService
         {
             foods = filterByFoodCategory(foods, foodCategory);
         }
-        return List.of();
+        return foods;
     }
 
     private List<Food> filterByFoodCategory(List<Food> foods, String foodCategory)
@@ -112,7 +112,7 @@ public class FoodServiceImpl implements FoodService
         Optional<Food> optionalFood = foodRepository.findById(foodId);
         if (optionalFood.isEmpty())
         {
-            throw new Exception("Food does not exist..");
+            throw new Exception("Food does not exist with id: "+foodId);
         }
         return optionalFood.get();
     }
@@ -123,5 +123,11 @@ public class FoodServiceImpl implements FoodService
         Food food = findFoodById(foodId);
         food.setAvailable(!food.isAvailable());
         return foodRepository.save(food);
+    }
+
+    @Override
+    public List<Food> getAllFood()
+    {
+        return foodRepository.findAll();
     }
 }

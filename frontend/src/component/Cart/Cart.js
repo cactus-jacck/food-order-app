@@ -1,5 +1,5 @@
 import { Divider, Modal, Box, Grid2 } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CartItem from './CartItem'
 import AddressCard from './AddressCard'
 import { Card } from '@mui/material';
@@ -8,8 +8,36 @@ import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import { Formik, ErrorMessage, Field, Form } from 'formik';
 import * as Yup from "yup";
 import TextField from '@mui/material/TextField';
+import { useDispatch, useSelector } from 'react-redux';
+import { create } from '@mui/material/styles/createTransitions';
+import { createOrder } from '../state/order/Action';
+import { clearCartAction, findCart } from '../state/cart/Action';
+import { Snackbar, Alert } from "@mui/material";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const items = [1, 1]
+
+const staticAddresses = [
+  {
+    id: 1,
+    fullName: "John Doe",
+    streetAddress: "123 MG Road",
+    city: "Bengaluru",
+    state: "Karnataka",
+    postalCode: "560001",
+    country: "India",
+  },
+  {
+    id: 2,
+    fullName: "Jane Smith",
+    streetAddress: "456 Indiranagar",
+    city: "Bengaluru",
+    state: "Karnataka",
+    postalCode: "560038",
+    country: "India",
+  }
+];
 
 export const style = {
   position: 'absolute',
@@ -36,42 +64,92 @@ const validationSchema = Yup.object().shape({
 });
 
 const Cart = () => {
-  const createOrdersUsingSelectedAddress = () => {
-
+  const createOrdersUsingSelectedAddress = (address) => {
+    console.log(address)
+    handleSubmit(address)
   }
+  const { cart, auth } = useSelector(store => store)
+  console.log("auth: ", auth.user?.addresses)
+  const dispatch = useDispatch()
+  const [openBackdrop, setOpenBackdrop] = useState(false);
+
   const handleOpenAdressModal = () => setOpen(true);
   const [open, setOpen] = React.useState(false);
+  const [selectedAddress, setSelectedAddress] = React.useState("");
+
+  useEffect(() => {
+          dispatch(findCart(localStorage.getItem('jwt')))
+      }, [])
+
   const handleClose = () => setOpen(false);
+
   const handleSubmit = (value) => {
-    console.log(value)
+    const data = {
+      jwt: localStorage.getItem('jwt'),
+      order: {
+        restaurantId: cart.cart.restaurantId,
+        deliveryAddress: {
+          fullName: auth.user?.fullName,
+          streetAddress: value.streetAddress,
+          city: value.city,
+          state: value.state,
+          postalCode: value.pincode,
+          country: "India"
+        }
+      }
+    }
+    setOpenBackdrop(true);
+    dispatch(createOrder(data));
+
+    setTimeout(() => {
+      setOpenBackdrop(false);
+      dispatch(clearCartAction());
+    }, 2000);
   }
+
+  const itemTotal = cart.cart?.total || 0;
+  const deliveryCharge = cart.cartItems?.length > 0 ? 25 : 0;
+  const gst = cart.cartItems?.length > 0 ? 19 : 0;
+  const totalPay = itemTotal + deliveryCharge + gst;
+  const isCartEmpty = !cart.cartItems || cart.cartItems.length === 0;
+
+  // console.log("cart: ", cart)
+
   return (
     <>
+      <Backdrop sx={{ color: "#fff", zIndex: 1300 }} open={openBackdrop}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <main className='lg:flex justify-between'>
         <section className='lg:w-[30%] space-y-6 lg:min-h-screen pt-10'>
-          {items.map((item) => (<CartItem />))}
+          {cart.cartItems?.map((item) => (<CartItem item={item} />))}
           <Divider />
+          {isCartEmpty && (
+            <div className="text-center text-red-500 font-semibold mb-4">
+              Your cart is empty
+            </div>
+          )}
           <div className='billDetails px-5 text-sm'>
             <p className='font-extralight py-5'>Bill Details</p>
             <div className='space-y-3'>
               <div className='flex justify-between text-gray-400'>
                 <p>Item Total</p>
-                <p>599</p>
+                <p>{itemTotal}</p>
               </div>
               <div className='flex justify-between text-gray-400'>
                 <p>Delivery Charge</p>
-                <p>25</p>
+                <p>{deliveryCharge}</p>
               </div>
               <div className='flex justify-between text-gray-400'>
                 <p>GST</p>
-                <p>19</p>
+                <p>{gst}</p>
               </div>
               <Divider />
             </div>
             <div>
               <div className='flex justify-between text-gray-400'>
                 <p>Total Pay</p>
-                <p>633</p>
+                <p>{totalPay}</p>
               </div>
             </div>
           </div>
@@ -83,8 +161,14 @@ const Cart = () => {
               Choose Delivery Address
             </h1>
             <div className='flex gap-5 flex-wrap justify-center'>
-              {[1, 1, 1].map((item) =>
-                <AddressCard handleSelectAddress={createOrdersUsingSelectedAddress} item={item} showButton={true} />)}
+              {auth.user?.addresses.map((item) =>
+                <AddressCard
+                  key={item.id}
+                  handleSelectAddress={() => createOrdersUsingSelectedAddress(item)}
+                  item={item}
+                  showButton={true}
+                  cartItems={cart.cartItems}
+                />)}
               <Card className='flex gap-5 w-64 p-5'>
                 <AddLocationAltIcon />
                 <div className='space-y-3 text-gray-500'>
@@ -172,7 +256,7 @@ const Cart = () => {
                     />
                   </Grid2>
                   <Grid2 item xs={12}>
-                      <Button fullWidth variant='contained' type='submit' color='primary'>Deliver Here</Button>
+                    <Button fullWidth variant='contained' type='submit' color='primary'>Deliver Here</Button>
                   </Grid2>
                 </Grid2>
               </Form>

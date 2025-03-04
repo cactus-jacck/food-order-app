@@ -24,6 +24,8 @@ public class RestaurantDTO
 
     private String city;
 
+    private String openingHours;
+
     private boolean open;
 
     @Override

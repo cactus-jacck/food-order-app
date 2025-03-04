@@ -119,6 +119,7 @@ public class RestaurantServiceImpl implements RestaurantService
         dto.setDescription(restaurant.getDescription());
         dto.setImages(restaurant.getImages());
         dto.setTitle(restaurant.getName());
+        dto.setOpen(restaurant.isOpen());
         dto.setId(restaurantId);
 
         if (user.getFavourites().contains(dto))
