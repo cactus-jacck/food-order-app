@@ -40,9 +40,9 @@ public class UserContoller
         return new ResponseEntity<>(addressList, HttpStatus.OK);
     }
 
-    @PutMapping("/addresses")
-    public ResponseEntity<Address> updateAddress(@RequestHeader("Authorization") String jwt, @RequestBody AddressRequestDto addressReqDto)
-    {
-        Address address = userService.updateAddress(jwt, addressReqDto);
-    }
+//    @PutMapping("/addresses")
+//    public ResponseEntity<Address> updateAddress(@RequestHeader("Authorization") String jwt, @RequestBody AddressRequestDto addressReqDto)
+//    {
+//        Address address = userService.updateAddress(jwt, addressReqDto);
+//    }
 }

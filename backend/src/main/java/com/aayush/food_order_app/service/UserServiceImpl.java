@@ -45,15 +45,16 @@ public class UserServiceImpl implements UserService
     @Override
     public Address updateAddress(String jwt, AddressRequestDto addressReqDto) throws Exception
     {
-        String email = jwtProvider.getEmailFromJwtToken(jwt);
-        User user = findUserByEmail(email);
-
-        for (Address address: user.getAddresses())
-        {
-            if (address.getId() == addressReqDto.getId())
-            {
-                address.setCity(ad);
-            }
-        }
+//        String email = jwtProvider.getEmailFromJwtToken(jwt);
+//        User user = findUserByEmail(email);
+//
+//        for (Address address: user.getAddresses())
+//        {
+//            if (address.getId() == addressReqDto.getId())
+//            {
+//                address.setCity(ad);
+//            }
+//        }
+        return null;
     }
 }
