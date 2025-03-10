@@ -1,8 +1,6 @@
 package com.aayush.food_order_app.controller;
 
-import com.aayush.food_order_app.model.Restaurant;
-import com.aayush.food_order_app.model.RestaurantDTO;
-import com.aayush.food_order_app.model.User;
+import com.aayush.food_order_app.model.*;
 import com.aayush.food_order_app.service.RestaurantService;
 import com.aayush.food_order_app.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -33,10 +31,16 @@ public class RestaurantCustomerController
         List<RestaurantDTO> restaurantDtoList = new ArrayList<>();
         for (Restaurant restaurant : restaurants )
         {
+            List<String> images = new ArrayList<>();
+            for (RestaurantImage image: restaurant.getImages())
+            {
+                images.add(image.getImageUrl());
+            }
+
             RestaurantDTO restaurantDTO = new RestaurantDTO();
             restaurantDTO.setId(restaurant.getId());
             restaurantDTO.setTitle(restaurant.getName());
-            restaurantDTO.setImages(restaurant.getImages());
+            restaurantDTO.setImages(images.get(0));
             restaurantDTO.setCity(restaurant.getAddress().getCity());
             restaurantDTO.setDescription(restaurant.getDescription());
             restaurantDTO.setOwnerName(restaurant.getOwner().getFullName());
@@ -64,7 +68,7 @@ public class RestaurantCustomerController
         RestaurantDTO restaurantDTO = new RestaurantDTO();
         restaurantDTO.setId(restaurant.getId());
         restaurantDTO.setTitle(restaurant.getName());
-        restaurantDTO.setImages(restaurant.getImages());
+        restaurantDTO.setImages(restaurant.getImages().get(0).getImageUrl());
         restaurantDTO.setDescription(restaurant.getDescription());
         restaurantDTO.setOwnerName(restaurant.getOwner().getFullName());
         restaurantDTO.setCity(restaurant.getAddress().getCity());
@@ -74,14 +78,14 @@ public class RestaurantCustomerController
     }
 
     @PutMapping("/{id}/add-favourites")
-    public ResponseEntity<RestaurantDTO> addToFavourites(
+    public ResponseEntity<UserFavourite> addToFavourites(
             @RequestHeader("Authorization") String jwt,
             @PathVariable long id) throws Exception
     {
         User user = userService.findUserByJwtToken(jwt);
 
-        RestaurantDTO restaurantDto = restaurantService.addToFavourites(id, user);
+        UserFavourite userFavourite = restaurantService.addToFavourites(id, user);
 
-        return new ResponseEntity<>(restaurantDto, HttpStatus.OK);
+        return new ResponseEntity<>(userFavourite, HttpStatus.OK);
     }
 }

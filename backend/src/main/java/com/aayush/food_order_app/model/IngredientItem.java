@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class IngredientItem
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
@@ -25,6 +25,11 @@ public class IngredientItem
     @JsonIgnore
     @ManyToOne
     private Restaurant restaurant;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "food_id")  // Creates a foreign key in ingredient_item table
+    private Food food;
 
     private boolean inStock = true;
 }

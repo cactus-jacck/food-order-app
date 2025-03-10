@@ -19,7 +19,7 @@ import java.util.List;
 public class Restaurant
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @OneToOne
@@ -42,9 +42,8 @@ public class Restaurant
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
-    @Column(length = 1000)
-    @ElementCollection
-    private List<String> images;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RestaurantImage> images;
 
     private LocalDateTime registrationDate;
 

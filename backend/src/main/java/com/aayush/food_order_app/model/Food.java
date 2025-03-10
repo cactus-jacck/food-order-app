@@ -19,7 +19,7 @@ import java.util.List;
 public class Food
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
@@ -31,9 +31,8 @@ public class Food
     @ManyToOne
     private Category foodCategory;
 
-    @Column(length = 1000)
-    @ElementCollection
-    private List<String> images;
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FoodImage> foodImages;
 
     private boolean available;
 
@@ -45,7 +44,7 @@ public class Food
 
     private boolean isSeasonal;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IngredientItem> ingredients = new ArrayList<>();
 
     private Date creationDate;

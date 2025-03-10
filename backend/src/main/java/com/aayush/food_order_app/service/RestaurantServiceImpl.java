@@ -1,8 +1,6 @@
 package com.aayush.food_order_app.service;
 
-import com.aayush.food_order_app.model.Restaurant;
-import com.aayush.food_order_app.model.RestaurantDTO;
-import com.aayush.food_order_app.model.User;
+import com.aayush.food_order_app.model.*;
 import com.aayush.food_order_app.repository.AddressRepository;
 import com.aayush.food_order_app.repository.RestaurantRepository;
 import com.aayush.food_order_app.repository.UserRepository;
@@ -11,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,12 +40,22 @@ public class RestaurantServiceImpl implements RestaurantService
                 .contactInformation(restaurantRequestDto.getContactInformation())
                 .cuisineType(restaurantRequestDto.getCuisineType())
                 .description(restaurantRequestDto.getDescription())
-                .images(restaurantRequestDto.getImages())
                 .name(restaurantRequestDto.getName())
                 .openingHours(restaurantRequestDto.getOpeningHours())
                 .registrationDate(LocalDateTime.now())
                 .owner(user)
                 .build();
+
+        List<RestaurantImage> restaurantImageList = new ArrayList<>();
+
+        for (String imageUrl : restaurantRequestDto.getImages())
+        {
+            RestaurantImage temp = new RestaurantImage();
+            temp.setImageUrl(imageUrl);
+            temp.setRestaurant(restaurant);
+            restaurantImageList.add(temp);
+        }
+        restaurant.setImages(restaurantImageList);
 
         restaurantRepository.save(restaurant);
 
@@ -64,7 +73,17 @@ public class RestaurantServiceImpl implements RestaurantService
         restaurant.setContactInformation(updatedRestaurant.getContactInformation());
         restaurant.setOpeningHours(updatedRestaurant.getOpeningHours());
         restaurant.setName(updatedRestaurant.getName());
-        restaurant.setImages(updatedRestaurant.getImages());
+
+        List<RestaurantImage> restaurantImageList = new ArrayList<>();
+
+        for (String imageUrl : updatedRestaurant.getImages())
+        {
+            RestaurantImage temp = new RestaurantImage();
+            temp.setImageUrl(imageUrl);
+            temp.setRestaurant(restaurant);
+            restaurantImageList.add(temp);
+        }
+        restaurant.setImages(restaurantImageList);
         return restaurantRepository.save(restaurant);
     }
 
@@ -111,26 +130,29 @@ public class RestaurantServiceImpl implements RestaurantService
     }
 
     @Override
-    public RestaurantDTO addToFavourites(long restaurantId, User user) throws Exception
+    public UserFavourite addToFavourites(long restaurantId, User user) throws Exception
     {
         Restaurant restaurant = findRestaurantById(restaurantId);
 
-        RestaurantDTO dto = new RestaurantDTO();
-        dto.setDescription(restaurant.getDescription());
-        dto.setImages(restaurant.getImages());
-        dto.setTitle(restaurant.getName());
-        dto.setOpen(restaurant.isOpen());
-        dto.setId(restaurantId);
+        UserFavourite userFavourite = UserFavourite.builder()
+                .title(restaurant.getName())
+                .city(restaurant.getAddress().getCity())
+                .description(restaurant.getDescription())
+                .images(restaurant.getImages().get(0).getImageUrl())
+                .openingHours(restaurant.getOpeningHours())
+                .open(restaurant.isOpen())
+                .ownerName(restaurant.getOwner().getFullName())
+                .build();
 
-        if (user.getFavourites().contains(dto))
+        if (user.getFavourites().contains(userFavourite))
         {
-            user.getFavourites().remove(dto);       //un-favourite the restaurant
+            user.getFavourites().remove(userFavourite);       //un-favourite the restaurant
         }
         else
-            user.getFavourites().add(dto);
+            user.getFavourites().add(userFavourite);
 
         userRepository.save(user);
-        return dto;
+        return userFavourite;
     }
 
     @Override

@@ -2,12 +2,14 @@ package com.aayush.food_order_app.service;
 
 import com.aayush.food_order_app.model.Category;
 import com.aayush.food_order_app.model.Food;
+import com.aayush.food_order_app.model.FoodImage;
 import com.aayush.food_order_app.model.Restaurant;
 import com.aayush.food_order_app.repository.FoodRepository;
 import com.aayush.food_order_app.requestDto.CreateFoodRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,12 +34,22 @@ public class FoodServiceImpl implements FoodService
                 .foodCategory(category)
                 .restaurant(restaurant)
                 .description(req.getDescription())
-                .images(req.getImages())
                 .price(req.getPrice())
                 .ingredients(req.getIngredientItems())
                 .isSeasonal(req.isSeasonal())
                 .isVegetarian(req.isVegetarian())
                 .build();
+
+        List<FoodImage> foodImages = new ArrayList<>();
+        for (String imageUrl : req.getImages())
+        {
+            FoodImage temp = new FoodImage();
+            temp.setImageUrl(imageUrl);
+            temp.setFood(food);
+            foodImages.add(temp);
+        }
+        food.setFoodImages(foodImages);
+
         restaurant.getFoods().add(food);
         return foodRepository.save(food);
     }

@@ -46,7 +46,7 @@ public class FoodCustomerController
                     .name(food.getName())
                     .description(food.getDescription())
                     .price(food.getPrice())
-                    .images(food.getImages())
+                    .images(food.getFoodImages())
                     .isVegetarian(food.isVegetarian())
                     .isSeasonal(food.isSeasonal())
                     .restaurantName(food.getRestaurant().getName())
