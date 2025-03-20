@@ -52,7 +52,8 @@ public class AppConfig
                 CorsConfiguration cfg = new CorsConfiguration();
                 cfg.setAllowedOrigins(Arrays.asList(
                     "http://food-order-app",
-                        "http://localhost:3000"
+                        "http://localhost:3000",
+                        "https://your-vercel-app.vercel.app"
                 ));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
