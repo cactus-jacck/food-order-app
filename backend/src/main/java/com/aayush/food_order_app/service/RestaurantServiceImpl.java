@@ -74,16 +74,15 @@ public class RestaurantServiceImpl implements RestaurantService
         restaurant.setOpeningHours(updatedRestaurant.getOpeningHours());
         restaurant.setName(updatedRestaurant.getName());
 
-        List<RestaurantImage> restaurantImageList = new ArrayList<>();
+        List<RestaurantImage> existingImages = restaurant.getImages();
+        existingImages.clear();
 
-        for (String imageUrl : updatedRestaurant.getImages())
-        {
+        for (String imageUrl : updatedRestaurant.getImages()) {
             RestaurantImage temp = new RestaurantImage();
             temp.setImageUrl(imageUrl);
             temp.setRestaurant(restaurant);
-            restaurantImageList.add(temp);
+            existingImages.add(temp);
         }
-        restaurant.setImages(restaurantImageList);
         return restaurantRepository.save(restaurant);
     }
 

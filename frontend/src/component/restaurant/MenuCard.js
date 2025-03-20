@@ -56,7 +56,7 @@ const MenuCard = ({ item }) => {
     }
     setTimeout(() => {
       dispatch(findCart(jwt));
-    }, 100);
+    }, 500);
   }
 
   const handleCheckboxChange = (itemName) => {
@@ -75,7 +75,7 @@ const MenuCard = ({ item }) => {
       >
         <div className='flex items-center justify-between w-full'>
           <div className='flex items-center gap-5 w-full'>
-            <img className='w-[7rem] h-[7rem] object-cover min-w-7' src={item.images[0]} alt="" />
+            <img className='w-[7rem] h-[7rem] object-cover min-w-7' src={item?.foodImages?.[0]?.imageUrl} alt="" />
             <div className='space-y-1 max-w-2xl w-full'>
               <p className='font-semibold text-xl'>{item.name}</p>
               <p>₹ {item.price}</p>

@@ -29,7 +29,7 @@ const RestaurantCard = ({item}) => {
         <Card className='w-[18rem] h-[18rem] flex flex-col productCard'>
             <div className={`${true ? 'cursor-pointer' : "cursor-not-allowed"} relative w-full h-[10rem]`}>
                 <img className='w-full h-full rounded-t-md object-cover'
-                    src={item.images[0]} alt='' />
+                    src={item.images} alt='' />
                 <Chip size='small'
                     className='absolute top-2 left-2'
                     color={item.open ? "success" : "error"}

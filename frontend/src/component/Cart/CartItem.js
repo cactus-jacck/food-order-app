@@ -24,7 +24,7 @@ const CartItem = ({item}) => {
     <div className='px-5'>
       <div className='lg:flex items-center lg:space-x-5'>
         <div>
-            <img className='w-[5rem] h-[rem] object-cover' src={item.food.images[0]} alt="" srcset="" />
+            <img className='w-[5rem] h-[rem] object-cover' src={item.food.foodImages[0].imageUrl} alt="" srcset="" />
         </div>
         <div className='flex items-center justify-between lg:w-[70]'>
             <div className='space-y-1 lg:space-y-3 w-full'>

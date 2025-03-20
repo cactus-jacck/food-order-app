@@ -45,6 +45,7 @@ public class RestaurantCustomerController
             restaurantDTO.setDescription(restaurant.getDescription());
             restaurantDTO.setOwnerName(restaurant.getOwner().getFullName());
             restaurantDTO.setOpen(restaurant.isOpen());
+            restaurantDTO.setOpeningHours(restaurant.getOpeningHours());
 //            restaurantDTO.setAddress(restaurant.getAddress());
 
             restaurantDtoList.add(restaurantDTO);

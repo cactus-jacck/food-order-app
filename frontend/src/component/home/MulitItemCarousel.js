@@ -45,7 +45,7 @@ const MulitItemCarousel = () => {
             onClick={() => navigateToRestaurant(item)}
           >
             <CarouselItem
-              image={item.images[0]}
+              image={item?.images?.[0]?.imageUrl}
               title={item.name}
             />
           </div>

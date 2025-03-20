@@ -37,7 +37,7 @@ public class FoodCustomerController
     {
         User user = userService.findUserByJwtToken(jwt);
         List<Food> foods = foodService.getAllFood();
-        List<FoodResponseDto> foodResponseDtoList= new ArrayList<FoodResponseDto>();
+        List<FoodResponseDto> foodResponseDtoList= new ArrayList<>();
 
         for (Food food: foods)
         {

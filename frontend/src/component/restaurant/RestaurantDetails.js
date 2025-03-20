@@ -19,7 +19,6 @@ const foodTypes = [
 ]
 
 const RestaurantDetails = () => {
-
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const jwt = localStorage.getItem('jwt') || ''
@@ -63,7 +62,7 @@ const RestaurantDetails = () => {
         console.log(e.target.value, e.target.name, value)
     };
 
-    console.log("menu: ", menu)
+    console.log("Restaurant: ", restaurant)
 
     return (
         <div className='px-5 lg:px-20'>
@@ -72,11 +71,11 @@ const RestaurantDetails = () => {
                 <div>
                     <Grid2 container spacing={2}>
                         <Grid2 item xs={12}>
-                            <img className='w-full h-[40vh] object-cover' src={restaurant.restaurant?.images[0]} alt='' />
+                            <img className='w-full h-[40vh] object-cover' src={restaurant.restaurant?.images} alt='Image 1' />
                         </Grid2>
-                        <Grid2 item xs={12} lg={6}>
-                            <img className='w-full h-[40vh] object-cover' src={restaurant.restaurant?.images[1]} alt='' />
-                        </Grid2>
+                        {/* <Grid2 item xs={12} lg={6}>
+                            <img className='w-full h-[40vh] object-cover' src={restaurant.restaurant?.images} alt='Image 2' />
+                        </Grid2> */}
                         
                     </Grid2>
                 </div>

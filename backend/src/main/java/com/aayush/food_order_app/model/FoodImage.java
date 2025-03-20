@@ -1,5 +1,6 @@
 package com.aayush.food_order_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class FoodImage {
 
     private String imageUrl;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "food_id", nullable = false)
     private Food food;
