@@ -53,7 +53,7 @@ public class AppConfig
                 cfg.setAllowedOrigins(Arrays.asList(
                     "http://food-order-app",
                         "http://localhost:3000",
-                        "https://food-order-app-liard-phi.vercel.app/"
+                        "https://eatzyv2.vercel.app/"
                 ));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
