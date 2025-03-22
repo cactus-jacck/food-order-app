@@ -26,7 +26,7 @@ const Navbar = () => {
 
       <div className='flex-grow lg:mr-10 cursor-pointer flex items-center space-x-4'>
         <li onClick={()=>navigate("/")} className='logo font-semibold text-gray-300 text-2xl'>
-          Paradise
+          Eatzy
         </li>
       </div>
 
