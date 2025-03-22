@@ -31,7 +31,7 @@ export const loginUser = (reqData) => async(dispatch)=>{
         if(data.jwt) localStorage.setItem("jwt", data.jwt)
         if(data.role==="ROLE_RESTAURANT_OWNER")
         {
-            reqData.navigate("/admin/restaurant")
+            reqData.navigate("/")
         }
         else{
             reqData.navigate("/")

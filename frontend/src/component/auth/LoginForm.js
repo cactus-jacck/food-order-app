@@ -6,6 +6,8 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { loginUser } from '../state/authentication/Action';
+import { getAllRestaurantsAction } from '../state/restaurant/Action'
+import { getAllMenuItems } from '../state/menu/Action';
 
 const initialValues = {
     email: "",
@@ -18,6 +20,13 @@ const LoginForm = () => {
 
     const handleSubmit = (values) => {
         dispatch(loginUser({ userData: values, navigate }));
+        setTimeout(() => {
+            const jwt = localStorage.getItem('jwt')
+            console.log(jwt)
+            dispatch(getAllMenuItems(jwt)) 
+            dispatch(getAllRestaurantsAction(jwt)) }, 
+            2000);
+        
     };
 
     return (

@@ -26,7 +26,6 @@ const MulitItemCarousel = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-        console.log("jwt ", jwt)
         dispatch(getAllMenuItems(jwt))
       }, [])
 
