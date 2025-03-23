@@ -23,7 +23,7 @@ const Home = () => {
         <div className='pb-10'>
             <section className='banner -z-50 relative flex flex-col justify-center items-center'>
                 <div className='w-[50vw] z-10 text-center'>
-                    <p className='text-8xl shadow-lg lg:text-6xl font-bold z-10 py-5'>
+                    <p className='text-6xl lg:text-8xl shadow-lg font-bold z-10 py-5'>
                         Eatzy
                     </p>
                     <p className='z-10 italic text-gray-300 text-xl lg:text-4xl'>order. eat. repeat.</p>
