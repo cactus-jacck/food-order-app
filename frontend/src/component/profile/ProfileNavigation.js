@@ -1,4 +1,4 @@
-import { Divider, Drawer, useMediaQuery } from '@mui/material'
+import { Divider, Drawer, useMediaQuery, IconButton } from '@mui/material'
 import React from 'react'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -12,56 +12,82 @@ import { useDispatch } from 'react-redux'
 import { logout } from '../state/authentication/Action';
 import { clearRestaurantState } from "../state/restaurant/Action";
 import { clearMenuState } from "../state/menu/Action";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useState } from "react";
 const menu = [
     { title: "Orders", icon: <ShoppingBagIcon /> },
     { title: "Favorites", icon: <FavoriteIcon /> },
     { title: "Address", icon: <HomeIcon /> },
-    { title: "Payments", icon: <AccountBalanceWalletIcon /> },
-    { title: "Notifications", icon: <NotificationsActiveIcon /> },
-    { title: "Events", icon: <EventIcon /> },
+    // { title: "Payments", icon: <AccountBalanceWalletIcon /> },
+    // { title: "Notifications", icon: <NotificationsActiveIcon /> },
+    // { title: "Events", icon: <EventIcon /> },
     { title: "Logout", icon: <LogoutIcon /> }
 ]
-const ProfileNavigation = ({ open, handleClose }) => {
-    const isSmallScreen = useMediaQuery("(max-width:1080)")
+const ProfileNavigation = () => {
+    const isSmallScreen = useMediaQuery("(max-width:1080px)");
     const navigate = useNavigate();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    
+    // State to control drawer open/close on small screens
+    const [open, setOpen] = useState(false);
 
     const handleNavigate = (item) => {
-        if(item.title === "Logout")
-        {
-            navigate("/account/login")
-            dispatch(clearRestaurantState())
-            dispatch(clearMenuState())
-            dispatch(logout())
+        if (item.title === "Logout") {
+            navigate("/account/login");
+            dispatch(clearRestaurantState());
+            dispatch(clearMenuState());
+            dispatch(logout());
+        } else {
+            navigate(`/my-profile/${item.title.toLowerCase()}`);
         }
-        else
-            navigate(`/my-profile/${item.title.toLowerCase()}`)
-    }
+        // Close drawer after clicking (on small screens)
+        if (isSmallScreen) setOpen(false);
+    };
 
     return (
-        <div>
+        <>
+            {/* Hamburger Icon for Small Screens */}
+            {isSmallScreen && (
+                <IconButton onClick={() => setOpen(true)} className="fixed top-4 left-4 z-50">
+                    <MenuIcon />
+                </IconButton>
+            )}
+
             <Drawer
                 variant={isSmallScreen ? "temporary" : "permanent"}
-                onClose={handleClose}
+                onClose={() => setOpen(false)}
                 open={isSmallScreen ? open : true}
-                anchor='left'
+                anchor="left"
                 sx={{
-                    zIndex: 1, position:"sticky"
+                    zIndex: 1,
+                    width: isSmallScreen ? "30vw" : "20vw",
+                    "& .MuiDrawer-paper": {
+                        width: isSmallScreen ? "30vw" : "20vw",
+                        backgroundColor: "bg-black",
+                        color: "white",
+                    },
+                    "& .MuiBackdrop-root": {
+                        backgroundColor: "transparent", // Optional: Prevent grey backdrop on small screens
+                    },
                 }}
->
-                <div className='w-[50vw] lg:w-[20vw] h-[100vh] flex 
-            flex-col justify-center text-lg gap-5 pt-16'>
-                {menu.map((item, i)=><>
-                    <div onClick={()=>handleNavigate(item)} className='px-5 flex items-center space-x-5 cursor-pointer'>
-                        {item.icon}
-                        <span>{item.title}</span>
-                    </div>
-                    {i !== menu.length-1 && <Divider/>}
-                </>)}
+            >
+                <div className="h-screen flex flex-col justify-center text-base gap-0 pt-12">
+                    {menu.map((item, i) => (
+                        <div key={i} >
+                            <div
+                                onClick={() => handleNavigate(item)}
+                                className="px-5 flex p-8 items-center space-x-5 cursor-pointer"
+                            >
+                                {item.icon}
+                                <span>{item.title}</span>
+                            </div>
+                            {i !== menu.length - 1 && <Divider />}
+                        </div>
+                    ))}
                 </div>
             </Drawer>
-        </div>
-    )
-}
+        </>
+    );
+};
 
 export default ProfileNavigation
