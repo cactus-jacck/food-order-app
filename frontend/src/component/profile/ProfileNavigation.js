@@ -60,9 +60,9 @@ const ProfileNavigation = () => {
                 anchor="left"
                 sx={{
                     zIndex: 1,
-                    width: isSmallScreen ? "30vw" : "20vw",
+                    width: isSmallScreen ? "38vw" : "20vw",
                     "& .MuiDrawer-paper": {
-                        width: isSmallScreen ? "30vw" : "20vw",
+                        width: isSmallScreen ? "38vw" : "20vw",
                         backgroundColor: "bg-black",
                         color: "white",
                     },
@@ -76,7 +76,7 @@ const ProfileNavigation = () => {
                         <div key={i} >
                             <div
                                 onClick={() => handleNavigate(item)}
-                                className="px-5 flex p-8 items-center space-x-5 cursor-pointer"
+                                className="px-5 max-w-[700px]:px-2 flex p-8 items-center space-x-5 max-w-[700px]:space-x-1 cursor-pointer"
                             >
                                 {item.icon}
                                 <span>{item.title}</span>
