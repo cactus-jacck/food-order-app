@@ -10,6 +10,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import { logout } from '../state/authentication/Action';
+import { clearRestaurantState } from "../state/restaurant/Action";
+import { clearMenuState } from "../state/menu/Action";
 const menu = [
     { title: "Orders", icon: <ShoppingBagIcon /> },
     { title: "Favorites", icon: <FavoriteIcon /> },
@@ -28,6 +30,8 @@ const ProfileNavigation = ({ open, handleClose }) => {
         if(item.title === "Logout")
         {
             navigate("/account/login")
+            dispatch(clearRestaurantState())
+            dispatch(clearMenuState())
             dispatch(logout())
         }
         else

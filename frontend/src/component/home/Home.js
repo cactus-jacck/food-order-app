@@ -3,6 +3,7 @@ import "./Home.css"
 import MulitItemCarousel from './MulitItemCarousel'
 import RestaurantCard from '../restaurant/RestaurantCard'
 import Auth from '../auth/Auth'
+import { CircularProgress, Box } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllRestaurantsAction } from '../state/restaurant/Action'
 import { useNavigate } from 'react-router-dom'
@@ -12,7 +13,7 @@ const Home = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const jwt = localStorage.getItem('jwt')|| '';
-    const {restaurant} = useSelector(store=>store)
+    const {restaurant, loading} = useSelector(store=>store)
 
     useEffect(() => {
         dispatch(getAllRestaurantsAction(jwt))
@@ -44,9 +45,13 @@ const Home = () => {
                     Order From Our Handpicked Favourites
                 </h1>
                 <div className='flex flex-wrap items-center justify-around gap-5'>
-                    {
+                    {restaurant.loading ?  (
+                        <Box className="flex justify-center items-center w-full h-40">
+                        <CircularProgress size={50} />
+                    </Box>
+                    ) : (
                         restaurant.restaurants.map((item) => <RestaurantCard item={item}/>)
-                    }
+                    )}
                 </div>
             </section>
             <Auth />

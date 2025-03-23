@@ -43,6 +43,11 @@ export const getAllMenuItems = (jwt) => {
     }
 }
 
+export const clearMenuState = () => (dispatch) => {
+    dispatch({ type: GET_ALL_MENU_ITEMS_FAILURE, payload: null }); 
+};
+
+
 export const createMenuItem = ({menu, jwt}) => {
     return async (dispatch) => {
         dispatch({type: CREATE_MENU_ITEM_REQUEST})

@@ -20,6 +20,10 @@ export const getAllRestaurantsAction = (token) => {
     }
 }
 
+export const clearRestaurantState = () => (dispatch) => {
+    dispatch({ type: GET_ALL_RESTAURANTS_FAILURE, payload: null }); 
+};
+
 export const getRestaurantById = (jwt, restaurantId) => {
     return async (dispatch) => {
         dispatch({type: GET_RESTAURANT_BY_ID_REQUEST});

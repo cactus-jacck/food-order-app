@@ -81,6 +81,7 @@ const menuItemReducer = (state = initialState, action) => {
         case actionTypes.GET_ALL_MENU_ITEMS_FAILURE:
             return {
                 ...state,
+                menuItems: [],
                 loading: false,
                 error: action.payload,
                 message: null

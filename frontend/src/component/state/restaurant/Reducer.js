@@ -119,6 +119,7 @@ const restaurantReducer = (state = initialState, action) => {
             case actionTypes.CREATE_CATEGORY_FAILURE:
                 return {
                     ...state,
+                    restaurants: [],
                     loading: false,
                     error: action.payload
                 }
