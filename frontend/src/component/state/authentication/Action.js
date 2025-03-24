@@ -37,7 +37,6 @@ export const loginUser = (reqData) => async(dispatch)=>{
             reqData.navigate("/")
         }
         dispatch({type:LOGIN_SUCCESS, payload:data.jwt})
-        console.log("login success", data)
     } catch (error) {
         dispatch({type: LOGIN_FAILURE, payload:error})
         console.log("error: ", error)

@@ -22,7 +22,6 @@ const LoginForm = () => {
         dispatch(loginUser({ userData: values, navigate }));
         setTimeout(() => {
             const jwt = localStorage.getItem('jwt')
-            console.log(jwt)
             dispatch(getAllMenuItems(jwt)) 
             dispatch(getAllRestaurantsAction(jwt)) }, 
             2000);

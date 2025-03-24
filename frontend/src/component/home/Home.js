@@ -13,7 +13,7 @@ const Home = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const jwt = localStorage.getItem('jwt')|| '';
-    const {restaurant, loading} = useSelector(store=>store)
+    const {restaurant} = useSelector(store=>store)
 
     useEffect(() => {
         dispatch(getAllRestaurantsAction(jwt))

@@ -4,7 +4,7 @@ import { act } from 'react-dom/test-utils'
 
 const initialState = {
     menuItems: [],
-    loading: false,
+    loading: true,
     error: null,
     search: [],
     message: null
