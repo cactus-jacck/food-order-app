@@ -12,14 +12,14 @@ import { findCart } from '../state/cart/Action'
 const Home = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const jwt = localStorage.getItem('jwt')|| '';
-    const {restaurant} = useSelector(store=>store)
+    const jwt = localStorage.getItem('jwt') || '';
+    const { restaurant } = useSelector(store => store)
 
     useEffect(() => {
         dispatch(getAllRestaurantsAction(jwt))
     }, [])
 
-    return(
+    return (
         <div className='pb-10'>
             <section className='banner -z-50 relative flex flex-col justify-center items-center'>
                 <div className='w-[50vw] z-10 text-center'>
@@ -45,12 +45,12 @@ const Home = () => {
                     Order From Our Handpicked Favourites
                 </h1>
                 <div className='flex flex-wrap items-center justify-around gap-5'>
-                    {restaurant.loading ?  (
+                    {restaurant.loading ? (
                         <Box className="flex justify-center items-center w-full h-40">
-                        <CircularProgress size={50} />
-                    </Box>
+                            <CircularProgress size={50} />
+                        </Box>
                     ) : (
-                        restaurant.restaurants.map((item) => <RestaurantCard item={item}/>)
+                        restaurant.restaurants.map((item) => <RestaurantCard item={item} />)
                     )}
                 </div>
             </section>

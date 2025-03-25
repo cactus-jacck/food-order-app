@@ -78,8 +78,8 @@ const Cart = () => {
   const [selectedAddress, setSelectedAddress] = React.useState("");
 
   useEffect(() => {
-          dispatch(findCart(localStorage.getItem('jwt')))
-      }, [])
+    dispatch(findCart(localStorage.getItem('jwt')))
+  }, [])
 
   const handleClose = () => setOpen(false);
 
@@ -113,7 +113,7 @@ const Cart = () => {
   const totalPay = itemTotal + deliveryCharge + gst;
   const isCartEmpty = !cart.cartItems || cart.cartItems.length === 0;
 
-  // console.log("cart: ", cart)
+  console.log("cart: ", cart.loading)
 
   return (
     <>
@@ -122,7 +122,13 @@ const Cart = () => {
       </Backdrop>
       <main className='lg:flex justify-between'>
         <section className='lg:w-[30%] space-y-6 lg:min-h-screen pt-10'>
-          {cart.cartItems?.map((item) => (<CartItem item={item} />))}
+          {cart.loading ? (
+            <Box className="flex justify-center items-center w-full h-40">
+              <CircularProgress size={50} />
+            </Box>
+          ) : (
+            cart.cartItems?.map((item) => (<CartItem item={item} />))
+            )}
           <Divider />
           {isCartEmpty && (
             <div className="text-center text-red-500 font-semibold mb-4">
