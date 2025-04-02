@@ -20,7 +20,7 @@ import java.util.Collections;
 @EnableWebSecurity
 public class AppConfig
 {
-    private static final String[] WHITE_LIST_URL = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
+    private static final String[] WHITE_LIST_URL = { "/", "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
             "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
             "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
             "/api/test/**", "/authenticate" };
@@ -53,7 +53,8 @@ public class AppConfig
                 cfg.setAllowedOrigins(Arrays.asList(
                     "http://food-order-app",
                         "http://localhost:3000",
-                        "https://eatzyv2.vercel.app"
+                        "https://eatzyv2.vercel.app",
+                        "https://food-order-app-production-44a4.up.railway.app"
                 ));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
