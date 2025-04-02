@@ -1,5 +1,10 @@
-import { ADD_TO_FAVORITE_REQUEST, ADD_TO_FAVORITE_SUCCESS, GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_REQUEST, 
-    REGISTER_SUCCESS, REGISTER_FAILURE, LOGIN_FAILURE, GET_USER_FAILURE, ADD_TO_FAVORITE_FAILURE, GET_USER_SUCCESS, LOGOUT } 
+import {
+    ADD_TO_FAVORITE_REQUEST, ADD_TO_FAVORITE_SUCCESS, GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_REQUEST,
+    REGISTER_SUCCESS, REGISTER_FAILURE, LOGIN_FAILURE, GET_USER_FAILURE, ADD_TO_FAVORITE_FAILURE, GET_USER_SUCCESS, LOGOUT,
+    CREATE_ADDRESS_REQUEST,
+    CREATE_ADDRESS_SUCCESS,
+    CREATE_ADDRESS_FAILURE
+}
     from "./ActionTypes.js";
 import { isPresentInFavorites } from "../../config/login";
 
@@ -17,6 +22,7 @@ export const authReducer = (state = initialState, action) => {
         case LOGIN_REQUEST:
         case GET_USER_REQUEST:
         case ADD_TO_FAVORITE_REQUEST:
+        case CREATE_ADDRESS_REQUEST:
             return {
                 ...state,
                 isLoading: true,
@@ -50,10 +56,28 @@ export const authReducer = (state = initialState, action) => {
                     state.favorites.filter((item) => item.id !== action.payload.id) :
                     [action.payload, ...state.favorites]
             }
+        case CREATE_ADDRESS_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                user: {
+                    ...state.user,
+                    addresses: [...state.user.addresses, action.payload] // Add new address
+                },
+                success: "Address added successfully",
+                error: null
+            };
         case REGISTER_FAILURE:
         case LOGIN_FAILURE:
         case GET_USER_FAILURE:
         case ADD_TO_FAVORITE_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+                success: null
+            };
+        case CREATE_ADDRESS_FAILURE:
             return {
                 ...state,
                 isLoading: false,

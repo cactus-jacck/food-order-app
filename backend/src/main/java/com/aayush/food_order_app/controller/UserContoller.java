@@ -40,9 +40,19 @@ public class UserContoller
         return new ResponseEntity<>(addressList, HttpStatus.OK);
     }
 
-//    @PutMapping("/addresses")
-//    public ResponseEntity<Address> updateAddress(@RequestHeader("Authorization") String jwt, @RequestBody AddressRequestDto addressReqDto)
-//    {
-//        Address address = userService.updateAddress(jwt, addressReqDto);
-//    }
+    @PostMapping("/address")
+    public ResponseEntity<Address> createAddress(@RequestHeader("Authorization") String jwt, @RequestBody AddressRequestDto addressRequestDto) throws Exception
+    {
+        User user = userService.findUserByJwtToken(jwt);
+        Address address = userService.createAddress(user, addressRequestDto);
+        return new ResponseEntity<>(address, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/address/{addressId}")
+    public ResponseEntity<String> deleteAddress(@RequestHeader("Authorization") String jwt, @PathVariable Long addressId) throws Exception
+    {
+        User user = userService.findUserByJwtToken(jwt);
+        return new ResponseEntity<>(userService.deleteAddress(user, addressId), HttpStatus.OK);
+    }
+
 }

@@ -11,6 +11,7 @@ import { Button } from '@mui/material';
 import { categorizeIngredients } from '../utils/categorizedIngredients';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, findCart, updateCartItem } from '../state/cart/Action';
+import { CircularProgress, Box } from "@mui/material";
 
 const demo = [
   {
@@ -33,11 +34,12 @@ const MenuCard = ({ item }) => {
   const { cart } = useSelector(store => store)
   const dispatch = useDispatch()
   const jwt = localStorage.getItem("jwt")
+  console.log("cart loading: ", cart.loading)
 
   const handleAddToCart = (e) => {
     e.preventDefault()
     const existingCartItem = cart?.cartItems?.find(cartItem => cartItem.food.id === item.id);
-    console.log("Existing cart item: ", existingCartItem)
+    // console.log("Existing cart item: ", existingCartItem)
 
     if (existingCartItem) {
       const data = { cartItemId: existingCartItem.id, quantity: existingCartItem.quantity + 1 }
@@ -53,9 +55,10 @@ const MenuCard = ({ item }) => {
         }
       }
       dispatch(addItemToCart(reqData))
+      console.log("Item added to cart")
     }
     setTimeout(() => {
-      dispatch(findCart(jwt));
+      // dispatch(findCart(jwt));
     }, 500);
   }
 
@@ -108,7 +111,7 @@ const MenuCard = ({ item }) => {
             </div>
             <div className='pt-5'>
               <Button type='submit' variant='contained' disabled={false}>
-                {true ? "Add to Cart" : "Out of stock"}
+              {cart.loading ? <CircularProgress size={24} color="inherit" /> : "Add to Cart"}
               </Button>
             </div>
           </form>

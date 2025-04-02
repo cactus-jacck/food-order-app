@@ -1,13 +1,16 @@
 package com.aayush.food_order_app.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address
 {
     @Id
@@ -24,6 +27,11 @@ public class Address
 
     private String country;
 
+    @Enumerated(EnumType.STRING)
+    private AddressType addressType;
+
+    private String customAddressType;
+
     @Override
     public String toString()
     {
@@ -34,6 +42,8 @@ public class Address
                 ", state='" + state + '\'' +
                 ", postalCode='" + postalCode + '\'' +
                 ", country='" + country + '\'' +
+                ", addressType=" + addressType +
+                (addressType == AddressType.OTHER ? ", customAddressType='" + customAddressType + '\'' : "") +
                 '}';
     }
 }

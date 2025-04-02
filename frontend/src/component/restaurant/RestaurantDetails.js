@@ -27,7 +27,6 @@ const RestaurantDetails = () => {
     const { auth, restaurant, menu } = useSelector(store => store)
     const [selectedCategory, setSelectedCategory] = useState("")
     const { id, city } = useParams()
-    console.log("menu ", menu.loading)
 
     const [foodType, setFoodType] = useState("all")
     const [foodCategory, setFoodCategory] = useState("");
@@ -66,7 +65,6 @@ const RestaurantDetails = () => {
         console.log(e.target.value, e.target.name, value)
     };
 
-    console.log("Restaurant: ", restaurant)
 
     return (
         <div className='px-5 lg:px-20'>

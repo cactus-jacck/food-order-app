@@ -5,7 +5,6 @@ import { useSelector, useStore } from 'react-redux';
 
 const UserProfile = () => {
   const {auth} = useSelector(store => store)
-  console.log("auth ", auth?.user?.fullName)
     const handleLogout=()=>{
 
     }

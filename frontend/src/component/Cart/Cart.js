@@ -1,4 +1,4 @@
-import { Divider, Modal, Box, Grid2 } from '@mui/material'
+import { Divider, Modal, Box, Grid2, MenuItem } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import CartItem from './CartItem'
 import AddressCard from './AddressCard'
@@ -15,29 +15,8 @@ import { clearCartAction, findCart } from '../state/cart/Action';
 import { Snackbar, Alert } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import { createAddress } from '../state/authentication/Action';
 
-const items = [1, 1]
-
-const staticAddresses = [
-  {
-    id: 1,
-    fullName: "John Doe",
-    streetAddress: "123 MG Road",
-    city: "Bengaluru",
-    state: "Karnataka",
-    postalCode: "560001",
-    country: "India",
-  },
-  {
-    id: 2,
-    fullName: "Jane Smith",
-    streetAddress: "456 Indiranagar",
-    city: "Bengaluru",
-    state: "Karnataka",
-    postalCode: "560038",
-    country: "India",
-  }
-];
 
 export const style = {
   position: 'absolute',
@@ -51,49 +30,40 @@ export const style = {
   p: 4,
 };
 const initialValues = {
-  streetAddress: "",
+  streetName: "",
   state: "",
-  pincode: "",
-  city: ""
+  postalCode: "",
+  city: "",
+  addressType: ""
 }
 const validationSchema = Yup.object().shape({
-  streetAddress: Yup.string().required("Street address is required"),
+  streetName: Yup.string().required("Street address is required"),
   state: Yup.string().required("State is required"),
-  pincode: Yup.string().required("Pincode is required"),
-  city: Yup.string().required("City is required")
+  postalCode: Yup.string().required("Pincode is required"),
+  city: Yup.string().required("City is required"),
+  addressType: Yup.string().required("Address type is required"),
+  customAddressType: Yup.string()
+    .nullable() // Ensure it can be null initially
+    .when("addressType", (addressType, schema) => {
+      return addressType === "OTHER"
+        ? schema.required("Custom address type is required")
+        : schema.notRequired();
+    }),
 });
 
 const Cart = () => {
   const createOrdersUsingSelectedAddress = (address) => {
     console.log(address)
-    handleSubmit(address)
-  }
-  const { cart, auth } = useSelector(store => store)
-  console.log("auth: ", auth.user?.addresses)
-  const dispatch = useDispatch()
-  const [openBackdrop, setOpenBackdrop] = useState(false);
-
-  const handleOpenAdressModal = () => setOpen(true);
-  const [open, setOpen] = React.useState(false);
-  const [selectedAddress, setSelectedAddress] = React.useState("");
-
-  useEffect(() => {
-    dispatch(findCart(localStorage.getItem('jwt')))
-  }, [])
-
-  const handleClose = () => setOpen(false);
-
-  const handleSubmit = (value) => {
     const data = {
       jwt: localStorage.getItem('jwt'),
       order: {
         restaurantId: cart.cart.restaurantId,
         deliveryAddress: {
           fullName: auth.user?.fullName,
-          streetAddress: value.streetAddress,
-          city: value.city,
-          state: value.state,
-          postalCode: value.pincode,
+          streetAddress: address.streetName,
+          city: address.city,
+          state: address.state,
+          postalCode: address.postalCode,
           country: "India"
         }
       }
@@ -106,6 +76,38 @@ const Cart = () => {
       dispatch(clearCartAction());
     }, 2000);
   }
+  const { cart, auth } = useSelector(store => store)
+  console.log("cart ", cart)
+  const dispatch = useDispatch()
+  const [openBackdrop, setOpenBackdrop] = useState(false);
+
+  const handleOpenAdressModal = () => setOpen(true);
+  const [open, setOpen] = React.useState(false);
+  const [selectedAddress, setSelectedAddress] = React.useState("");
+  const [selectedAddressType, setSelectedAddressType] = useState("HOME");
+
+  useEffect(() => {
+    dispatch(findCart(localStorage.getItem('jwt')))
+  }, [])
+
+  const handleClose = () => setOpen(false);
+
+  const handleSubmit = (value) => {
+    console.log("new address: ", value);
+    setOpenBackdrop(true);
+
+    const reqData = {
+      address: value,
+      jwt: localStorage.getItem("jwt"),
+    };
+
+    dispatch(createAddress(reqData));
+
+    setTimeout(() => {
+      setOpen(false)
+      setOpenBackdrop(false);
+    }, 1000);
+  }
 
   const itemTotal = cart.cart?.total || 0;
   const deliveryCharge = cart.cartItems?.length > 0 ? 25 : 0;
@@ -113,7 +115,6 @@ const Cart = () => {
   const totalPay = itemTotal + deliveryCharge + gst;
   const isCartEmpty = !cart.cartItems || cart.cartItems.length === 0;
 
-  console.log("cart: ", cart.loading)
 
   return (
     <>
@@ -128,7 +129,7 @@ const Cart = () => {
             </Box>
           ) : (
             cart.cartItems?.map((item) => (<CartItem item={item} />))
-            )}
+          )}
           <Divider />
           {isCartEmpty && (
             <div className="text-center text-red-500 font-semibold mb-4">
@@ -186,34 +187,23 @@ const Cart = () => {
           </div>
         </section>
       </main>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ errors, touched }) => (
+          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+            {({ errors, touched, values }) => (
               <Form>
-                <Grid2 container spacing={2}>
+                <Grid2 container spacing={2} direction="column">
                   <Grid2 item xs={12}>
                     <Field
                       as={TextField}
-                      name="streetAddress"
+                      name="streetName"
                       label="Street Address"
                       fullWidth
                       variant="outlined"
-                      error={touched.streetAddress && !!errors.streetAddress}
-                      helperText={
-                        touched.streetAddress && errors.streetAddress ? (
-                          <span className="text-red-600">{errors.streetAddress}</span>
-                        ) : null
-                      }
+                      error={touched.streetName && !!errors.streetName}
+                      helperText={touched.streetName && errors.streetName ? (
+                        <span className="text-red-600">{errors.streetName}</span>
+                      ) : null}
                     />
                   </Grid2>
                   <Grid2 item xs={12}>
@@ -223,12 +213,10 @@ const Cart = () => {
                       label="State"
                       fullWidth
                       variant="outlined"
-                      error={touched.streetAddress && !!errors.streetAddress}
-                      helperText={
-                        touched.streetAddress && errors.streetAddress ? (
-                          <span className="text-red-600">{errors.streetAddress}</span>
-                        ) : null
-                      }
+                      error={touched.state && !!errors.state}
+                      helperText={touched.state && errors.state ? (
+                        <span className="text-red-600">{errors.state}</span>
+                      ) : null}
                     />
                   </Grid2>
                   <Grid2 item xs={12}>
@@ -238,31 +226,75 @@ const Cart = () => {
                       label="City"
                       fullWidth
                       variant="outlined"
-                      error={touched.streetAddress && !!errors.streetAddress}
-                      helperText={
-                        touched.streetAddress && errors.streetAddress ? (
-                          <span className="text-red-600">{errors.streetAddress}</span>
-                        ) : null
-                      }
+                      error={touched.city && !!errors.city}
+                      helperText={touched.city && errors.city ? (
+                        <span className="text-red-600">{errors.city}</span>
+                      ) : null}
                     />
                   </Grid2>
                   <Grid2 item xs={12}>
                     <Field
                       as={TextField}
-                      name="pincode"
+                      name="postalCode"
                       label="Pincode"
                       fullWidth
                       variant="outlined"
-                      error={touched.streetAddress && !!errors.streetAddress}
-                      helperText={
-                        touched.streetAddress && errors.streetAddress ? (
-                          <span className="text-red-600">{errors.streetAddress}</span>
-                        ) : null
-                      }
+                      error={touched.postalCode && !!errors.postalCode}
+                      helperText={touched.postalCode && errors.postalCode ? (
+                        <span className="text-red-600">{errors.postalCode}</span>
+                      ) : null}
                     />
                   </Grid2>
+
+                  {/* Address Type Dropdown */}
                   <Grid2 item xs={12}>
-                    <Button fullWidth variant='contained' type='submit' color='primary'>Deliver Here</Button>
+                    <Field
+                      as={TextField}
+                      select
+                      name="addressType"
+                      label="Address Type"
+                      fullWidth
+                      variant="outlined"
+                      error={touched.addressType && !!errors.addressType}
+                      helperText={touched.addressType && errors.addressType ? (
+                        <span className="text-red-600">{errors.addressType}</span>
+                      ) : null}
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        setSelectedAddressType(value);
+                        if (value === "HOME" || value === "OFFICE") {
+                          values.customAddressType = "";
+                        }
+                        values.addressType = value;
+                      }}
+                    >
+                      <MenuItem value="HOME">Home</MenuItem>
+                      <MenuItem value="OFFICE">Office</MenuItem>
+                      <MenuItem value="OTHER">Other</MenuItem>
+                    </Field>
+                  </Grid2>
+
+                  {/* Show custom address type input only if 'Other' is selected */}
+                  {selectedAddressType === "OTHER" && (
+                    <Grid2 item xs={12}>
+                      <Field
+                        as={TextField}
+                        name="customAddressType"
+                        label="Custom Address Name"
+                        fullWidth
+                        variant="outlined"
+                        error={touched.customAddressType && !!errors.customAddressType}
+                        helperText={touched.customAddressType && errors.customAddressType ? (
+                          <span className="text-red-600">{errors.customAddressType}</span>
+                        ) : null}
+                      />
+                    </Grid2>
+                  )}
+
+                  <Grid2 item xs={12}>
+                    <Button fullWidth variant="contained" type="submit" color="primary">
+                      Save Address
+                    </Button>
                   </Grid2>
                 </Grid2>
               </Form>

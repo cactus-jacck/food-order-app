@@ -1,5 +1,5 @@
 import { api, API_URL } from "../../config/Api"
-import { LOGIN_REQUEST, REGISTER_REQUEST, REGISTER_SUCCESS, LOGIN_SUCCESS, GET_USER_REQUEST, ADD_TO_FAVORITE_REQUEST, ADD_TO_FAVORITE_SUCCESS, LOGOUT, REGISTER_FAILURE, LOGIN_FAILURE, GET_USER_FAILURE, ADD_TO_FAVORITE_FAILURE, GET_USER_SUCCESS } from "./ActionTypes"
+import { LOGIN_REQUEST, REGISTER_REQUEST, REGISTER_SUCCESS, LOGIN_SUCCESS, GET_USER_REQUEST, ADD_TO_FAVORITE_REQUEST, ADD_TO_FAVORITE_SUCCESS, LOGOUT, REGISTER_FAILURE, LOGIN_FAILURE, GET_USER_FAILURE, ADD_TO_FAVORITE_FAILURE, GET_USER_SUCCESS, CREATE_ADDRESS_REQUEST, CREATE_ADDRESS_SUCCESS, CREATE_ADDRESS_FAILURE } from "./ActionTypes"
 import axios from "axios"
 
 export const registerUser = (reqData) => async(dispatch)=>{
@@ -70,6 +70,22 @@ export const addToFavorites = ({jwt, restaurantId}) => async(dispatch)=>{
         dispatch({type:ADD_TO_FAVORITE_SUCCESS, payload:data})
     } catch (error) {
         dispatch({type:ADD_TO_FAVORITE_FAILURE, payload:error})
+        console.log("error: ", error)
+    }
+}
+
+export const createAddress = (reqData) => async(dispatch)=>{
+    dispatch({type:CREATE_ADDRESS_REQUEST})
+    try{
+        const {data} = await api.post(`/api/users/address`, reqData.address, {
+            headers:{
+                Authorization:`Bearer ${reqData.jwt}`
+            }
+        })
+        dispatch({type:CREATE_ADDRESS_SUCCESS, payload:data})
+        reqData.navigate("/")
+    } catch (error) {
+        dispatch({type:CREATE_ADDRESS_FAILURE, payload:error})
         console.log("error: ", error)
     }
 }

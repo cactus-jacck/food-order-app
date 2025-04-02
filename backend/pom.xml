@@ -128,7 +128,16 @@
 					</excludes>
 				</configuration>
 			</plugin>
-		</plugins>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <source>21</source>-->
+<!--                    <target>21</target>-->
+<!--&lt;!&ndash;                    <compilerArgs>&#45;&#45;enable-preview</compilerArgs>&ndash;&gt;-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+        </plugins>
 	</build>
 
 </project>

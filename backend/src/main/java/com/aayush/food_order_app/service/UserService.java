@@ -11,4 +11,8 @@ public interface UserService
     public User findUserByEmail(String email) throws Exception;
 
     Address updateAddress(String jwt, AddressRequestDto addressReqDto) throws Exception;
+
+    public Address createAddress(User user, AddressRequestDto addressRequestDto);
+
+    public String deleteAddress(User user, Long addressId);
 }
