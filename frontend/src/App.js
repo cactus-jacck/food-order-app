@@ -32,7 +32,7 @@ function App() {
       navigate("/account/login")
     }
 
-    dispatch(getUser(auth.jwt || jwt))
+    // dispatch(getUser(auth.jwt || jwt))
   },[auth.jwt])
 
   useEffect(() => {
