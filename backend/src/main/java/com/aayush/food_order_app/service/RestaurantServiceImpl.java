@@ -143,6 +143,8 @@ public class RestaurantServiceImpl implements RestaurantService
                 .ownerName(restaurant.getOwner().getFullName())
                 .build();
 
+        userFavourite.setUser(user);
+
         if (user.getFavourites().contains(userFavourite))
         {
             user.getFavourites().remove(userFavourite);       //un-favourite the restaurant
