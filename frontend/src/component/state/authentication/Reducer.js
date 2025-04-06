@@ -53,7 +53,7 @@ export const authReducer = (state = initialState, action) => {
                 isLoading: false,
                 error: null,
                 favorites: isPresentInFavorites(state.favorites, action.payload) ?
-                    state.favorites.filter((item) => item.id !== action.payload.id) :
+                    state.favorites.filter((item) => item.restaurantId !== action.payload.restaurantId) :
                     [action.payload, ...state.favorites]
             }
         case CREATE_ADDRESS_SUCCESS:

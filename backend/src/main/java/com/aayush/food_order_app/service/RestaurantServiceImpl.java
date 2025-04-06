@@ -3,6 +3,7 @@ package com.aayush.food_order_app.service;
 import com.aayush.food_order_app.model.*;
 import com.aayush.food_order_app.repository.AddressRepository;
 import com.aayush.food_order_app.repository.RestaurantRepository;
+import com.aayush.food_order_app.repository.UserFavouriteRespository;
 import com.aayush.food_order_app.repository.UserRepository;
 import com.aayush.food_order_app.requestDto.CreateRestaurantRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,15 @@ public class RestaurantServiceImpl implements RestaurantService
 
     private UserRepository userRepository;
 
+    private UserFavouriteRespository userFavouriteRespository;
+
     @Autowired
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, AddressRepository addressRepository, UserRepository userRepository)
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, AddressRepository addressRepository, UserRepository userRepository, UserFavouriteRespository userFavouriteRespository)
     {
         this.restaurantRepository = restaurantRepository;
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
+        this.userFavouriteRespository = userFavouriteRespository;
     }
 
 
@@ -134,6 +138,7 @@ public class RestaurantServiceImpl implements RestaurantService
         Restaurant restaurant = findRestaurantById(restaurantId);
 
         UserFavourite userFavourite = UserFavourite.builder()
+                .restaurantId(restaurantId)
                 .title(restaurant.getName())
                 .city(restaurant.getAddress().getCity())
                 .description(restaurant.getDescription())
@@ -150,7 +155,10 @@ public class RestaurantServiceImpl implements RestaurantService
             user.getFavourites().remove(userFavourite);       //un-favourite the restaurant
         }
         else
+        {
             user.getFavourites().add(userFavourite);
+            userFavouriteRespository.save(userFavourite);
+        }
 
         userRepository.save(user);
         return userFavourite;

@@ -23,7 +23,6 @@ const MulitItemCarousel = () => {
   const jwt = localStorage.getItem('jwt') || '';
   const dispatch = useDispatch();
   const { menu } = useSelector(store => store);
-  console.log("menu loading ", menu.loading);
   const navigate = useNavigate();
 
   useEffect(() => {

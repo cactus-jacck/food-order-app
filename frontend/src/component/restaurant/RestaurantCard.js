@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addToFavorites, getUser} from "../state/authentication/Action";
 import { isPresentInFavorites } from '../config/login';
+import { ContentPasteSearchOutlined } from '@mui/icons-material';
 
 const RestaurantCard = ({item}) => {
     const navigate = useNavigate()
@@ -15,7 +16,7 @@ const RestaurantCard = ({item}) => {
     const {auth} = useSelector(store=>store)
 
     const handleAddToFavorites = () => {
-        dispatch(addToFavorites({jwt, restaurantId:item.id}))
+        dispatch(addToFavorites({jwt, restaurantId:item.restaurantId? item.restaurantId : item.id}))
         dispatch(getUser(jwt))
     }
 
