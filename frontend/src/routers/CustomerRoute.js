@@ -14,9 +14,9 @@ const CustomerRoute = () => {
     <div>
       <Navbar />
       <Routes>
+          <Route path='/account/:register' element={<Home />} />
         <Route element={<ProtectedRoute />}>
           <Route path='/' element={<Home />} />
-          <Route path='/account/:register' element={<Home />} />
           <Route path='/admin/restaurant' element={<Home />} />
           <Route path='restaurant/:city/:title/:id' element={<RestaurantDetails />} />
           <Route path='/cart' element={<Cart />} />
